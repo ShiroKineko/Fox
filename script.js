@@ -27,6 +27,40 @@ function navigate(page) {
   }
 }
 
+// 初期表示
+navigate("home");
+
+function toggleTheme() {
+  document.body.classList.toggle("dark");
+
+  const isDark = document.body.classList.contains("dark");
+  localStorage.setItem("theme", isDark ? "dark" : "light");
+
+  updateIcon(isDark);
+}
+
+function updateIcon(isDark) {
+  const icon = document.querySelector(".theme-btn i");
+
+  if (!icon) return;
+
+  icon.className = isDark
+    ? "fa-solid fa-sun"
+    : "fa-solid fa-moon";
+}
+
+// 初期読み込み
+window.addEventListener("load", () => {
+  const theme = localStorage.getItem("theme");
+
+  if (theme === "dark") {
+    document.body.classList.add("dark");
+    updateIcon(true);
+  } else {
+    updateIcon(false);
+  }
+});
+
 function saveMemo() {
   const value = document.getElementById("memoInput").value;
 
@@ -57,9 +91,6 @@ document.addEventListener("input", (e) => {
     localStorage.setItem("memo", e.target.value);
   }
 });
-
-// 初期表示
-navigate("home");
 
 window.addEventListener("load", () => {
   if ("serviceWorker" in navigator) {
