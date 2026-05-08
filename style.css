@@ -2,10 +2,15 @@ body {
   font-family: sans-serif;
   text-align: center;
   margin-top: 40px;
+  margin: 0;
+  padding-top: env(safe-area-inset-top);
 }
 
 nav {
   margin-bottom: 20px;
+  position: sticky;
+  top: 0;
+  background: white;
 }
 
 button {
