@@ -25,17 +25,6 @@ function navigate(page) {
   app.innerHTML = pages[page] ?? "<h1>ページなし</h1>";
 }
 
-// 初期表示
-navigate("home");
-
-window.addEventListener("load", () => {
-  if ("serviceWorker" in navigator) {
-    navigator.serviceWorker.register("./sw.js")
-      .then(() => console.log("SW登録成功"))
-      .catch(err => console.error("SW登録失敗", err));
-  }
-});
-
 function saveMemo() {
   const value = document.getElementById("memoInput").value;
 
@@ -50,4 +39,15 @@ function loadMemo() {
   document.getElementById("output").innerText =
     value ? value : "何も保存されていません";
 }
+
+// 初期表示
+navigate("home");
+
+window.addEventListener("load", () => {
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("./sw.js")
+      .then(() => console.log("SW登録成功"))
+      .catch(err => console.error("SW登録失敗", err));
+  }
+});
 
