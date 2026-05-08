@@ -17,12 +17,14 @@ const pages = {
 };
 
 function navigate(page) {
-  if (!app) {
-    console.error("app要素が見つかりません");
-    return;
-  }
+  if (!app) return;
 
   app.innerHTML = pages[page] ?? "<h1>ページなし</h1>";
+
+  // ★ aboutページのときだけ復元
+  if (page === "about") {
+    renderMemo();
+  }
 }
 
 function saveMemo() {
@@ -39,6 +41,22 @@ function loadMemo() {
   document.getElementById("output").innerText =
     value ? value : "何も保存されていません";
 }
+
+function renderMemo() {
+  const value = localStorage.getItem("memo") || "";
+
+  const input = document.getElementById("memoInput");
+  const output = document.getElementById("output");
+
+  if (input) input.value = value;
+  if (output) output.innerText = value;
+}
+
+document.addEventListener("input", (e) => {
+  if (e.target.id === "memoInput") {
+    localStorage.setItem("memo", e.target.value);
+  }
+});
 
 // 初期表示
 navigate("home");
