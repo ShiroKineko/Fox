@@ -1,1 +1,21 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>My Simple Browser</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
 
+  <div class="topbar">
+    <input id="urlInput" type="text" placeholder="URLを入力（https://...）">
+    <button onclick="go()">移動</button>
+    <button onclick="back()">←</button>
+    <button onclick="forward()">→</button>
+  </div>
+
+  <iframe id="viewer"></iframe>
+
+  <script src="script.js"></script>
+</body>
+</html>
