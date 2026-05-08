@@ -8,6 +8,11 @@ const pages = {
   about: `
     <h1>紹介</h1>
     <p>切り替えテスト</p>
+    <h2>メモ</h2>
+    <input id="memoInput" type="text" placeholder="入力">
+    <button onclick="saveMemo()">保存</button>
+    <button onclick="loadMemo()">読み込み</button>
+    <p id="output"></p>
   `
 };
 
@@ -30,3 +35,19 @@ window.addEventListener("load", () => {
       .catch(err => console.error("SW登録失敗", err));
   }
 });
+
+function saveMemo() {
+  const value = document.getElementById("memoInput").value;
+
+  localStorage.setItem("memo", value);
+
+  alert("保存しました");
+}
+
+function loadMemo() {
+  const value = localStorage.getItem("memo");
+
+  document.getElementById("output").innerText =
+    value ? value : "何も保存されていません";
+}
+
