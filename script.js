@@ -1,20 +1,23 @@
 const app = document.getElementById("app");
 
-// 画面データ
 const pages = {
   home: `
     <h1>ホーム</h1>
-    <p>ここが最初の画面です</p>
+    <p>動作確認中</p>
   `,
   about: `
     <h1>紹介</h1>
-    <p>これは1ページアプリのデモです</p>
+    <p>切り替えテスト</p>
   `
 };
 
-// 画面切り替え
 function navigate(page) {
-  app.innerHTML = pages[page] || "<h1>404</h1>";
+  if (!app) {
+    console.error("app要素が見つかりません");
+    return;
+  }
+
+  app.innerHTML = pages[page] ?? "<h1>ページなし</h1>";
 }
 
 // 初期表示
