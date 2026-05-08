@@ -1,0 +1,51 @@
+name: Build Posts
+
+on:
+  issues:
+    types: [opened, edited]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Generate posts.json
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+
+            const issues = await github.paginate(
+              github.rest.issues.listForRepo,
+              {
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                state: 'open'
+              }
+            );
+
+            const posts = issues.map(issue => ({
+              id: issue.number,
+              title: issue.title,
+              content: issue.body,
+              date: issue.created_at
+            }));
+
+            fs.writeFileSync(
+              'posts.json',
+              JSON.stringify(posts, null, 2)
+            );
+
+      - name: Commit posts.json
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+
+          git add posts.json
+          git commit -m "update posts" || echo "no changes"
+          git push
