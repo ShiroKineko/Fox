@@ -1,1 +1,27 @@
+body {
+  margin: 0;
+  font-family: sans-serif;
+}
 
+.topbar {
+  display: flex;
+  gap: 5px;
+  padding: 8px;
+  background: #222;
+}
+
+.topbar input {
+  flex: 1;
+  padding: 6px;
+}
+
+.topbar button {
+  padding: 6px 10px;
+  cursor: pointer;
+}
+
+#viewer {
+  width: 100%;
+  height: calc(100vh - 50px);
+  border: none;
+}
