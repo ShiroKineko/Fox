@@ -1,4 +1,4 @@
-const CACHE_NAME = "spa-cache-v1";
+const CACHE_NAME = "spa-cache-v2";
 
 const FILES_TO_CACHE = [
   "./site.html",
@@ -7,20 +7,28 @@ const FILES_TO_CACHE = [
   "./manifest.json"
 ];
 
-// インストール時にキャッシュ
 self.addEventListener("install", (event) => {
+  self.skipWaiting(); // ★これ重要
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll(FILES_TO_CACHE);
-    })
+    caches.open(CACHE_NAME).then(cache => cache.addAll(FILES_TO_CACHE))
   );
 });
 
-// リクエストをキャッシュ優先にする
+self.addEventListener("activate", (event) => {
+  event.waitUntil(
+    caches.keys().then(keys =>
+      Promise.all(
+        keys.filter(k => k !== CACHE_NAME)
+            .map(k => caches.delete(k))
+      )
+    )
+  );
+});
+
 self.addEventListener("fetch", (event) => {
   event.respondWith(
-    caches.match(event.request).then((response) => {
-      return response || fetch(event.request);
-    })
+    fetch(event.request).catch(() =>
+      caches.match(event.request)
+    )
   );
 });
