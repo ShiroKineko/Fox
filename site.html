@@ -2,14 +2,19 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>My Site</title>
+  <title>SPAサンプル</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>こんにちは</h1>
-  <p>GitHub Pagesで公開するサイトです</p>
 
-  <button onclick="sayHello()">押してみて</button>
+  <nav>
+    <button onclick="navigate('home')">ホーム</button>
+    <button onclick="navigate('about')">紹介</button>
+  </nav>
+
+  <main id="app">
+    <!-- ここが入れ替わる -->
+  </main>
 
   <script src="script.js"></script>
 </body>
