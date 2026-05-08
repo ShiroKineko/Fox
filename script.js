@@ -1,102 +1,115 @@
 const app = document.getElementById("app");
 
-const pages = {
-  home: `
-    <h1>ホーム</h1>
-    <p>動作確認中</p>
-  `,
-  about: `
-    <h1>紹介</h1>
-    <p>切り替えテスト</p>
-    <h2>メモ</h2>
-    <input id="memoInput" type="text" placeholder="入力">
-    <button onclick="saveMemo()">保存</button>
-    <button onclick="loadMemo()">読み込み</button>
-    <p id="output"></p>
-  `
-};
+function getPosts() {
+  return JSON.parse(localStorage.getItem("posts") || "[]");
+}
 
+function savePosts(posts) {
+  localStorage.setItem("posts", JSON.stringify(posts));
+}
+
+/* --------------------
+   画面ルーティング
+-------------------- */
 function navigate(page) {
   if (!app) return;
 
-  app.innerHTML = pages[page] ?? "<h1>ページなし</h1>";
-
-  // ★ aboutページのときだけ復元
-  if (page === "about") {
-    renderMemo();
-  }
+  if (page === "home") renderHome();
+  if (page === "create") renderCreate();
 }
 
-// 初期表示
-navigate("home");
+/* --------------------
+   記事一覧
+-------------------- */
+function renderHome() {
+  const posts = getPosts();
 
+  app.innerHTML = `
+    <h1>記事一覧</h1>
+    <div>
+      ${posts.map(p => `
+        <div class="card" onclick="openPost('${p.id}')">
+          <h3>${p.title}</h3>
+          <small>${new Date(p.date).toLocaleString()}</small>
+        </div>
+      `).join("")}
+    </div>
+  `;
+}
+
+/* --------------------
+   投稿画面
+-------------------- */
+function renderCreate() {
+  app.innerHTML = `
+    <h1>記事作成</h1>
+
+    <input id="title" placeholder="タイトル">
+
+    <textarea id="content" placeholder="Markdownを書いてね"></textarea>
+
+    <button onclick="savePost()">投稿</button>
+
+    <h3>プレビュー</h3>
+    <div id="preview"></div>
+  `;
+
+  document.getElementById("content").addEventListener("input", (e) => {
+    document.getElementById("preview").innerHTML =
+      marked.parse(e.target.value);
+  });
+}
+
+/* --------------------
+   保存
+-------------------- */
+function savePost() {
+  const title = document.getElementById("title").value;
+  const content = document.getElementById("content").value;
+
+  const posts = getPosts();
+
+  posts.push({
+    id: Date.now().toString(),
+    title,
+    content,
+    date: new Date().toISOString()
+  });
+
+  savePosts(posts);
+
+  alert("投稿完了");
+  navigate("home");
+}
+
+/* --------------------
+   記事表示
+-------------------- */
+function openPost(id) {
+  const post = getPosts().find(p => p.id === id);
+
+  app.innerHTML = `
+    <button onclick="navigate('home')">←戻る</button>
+    <h1>${post.title}</h1>
+    <div>${marked.parse(post.content)}</div>
+  `;
+}
+
+/* --------------------
+   ダークモード
+-------------------- */
 function toggleTheme() {
   document.body.classList.toggle("dark");
 
   const isDark = document.body.classList.contains("dark");
   localStorage.setItem("theme", isDark ? "dark" : "light");
-
-  updateIcon(isDark);
 }
 
-function updateIcon(isDark) {
-  const icon = document.querySelector(".theme-btn i");
-
-  if (!icon) return;
-
-  icon.className = isDark
-    ? "fa-solid fa-sun"
-    : "fa-solid fa-moon";
-}
-
-// 初期読み込み
+/* 初期化 */
 window.addEventListener("load", () => {
-  const theme = localStorage.getItem("theme");
-
-  if (theme === "dark") {
+  if (localStorage.getItem("theme") === "dark") {
     document.body.classList.add("dark");
-    updateIcon(true);
-  } else {
-    updateIcon(false);
   }
+
+  navigate("home");
 });
-
-function saveMemo() {
-  const value = document.getElementById("memoInput").value;
-
-  localStorage.setItem("memo", value);
-
-  alert("保存しました");
-}
-
-function loadMemo() {
-  const value = localStorage.getItem("memo");
-
-  document.getElementById("output").innerText =
-    value ? value : "何も保存されていません";
-}
-
-function renderMemo() {
-  const value = localStorage.getItem("memo") || "";
-
-  const input = document.getElementById("memoInput");
-  const output = document.getElementById("output");
-
-  if (input) input.value = value;
-  if (output) output.innerText = value;
-}
-
-document.addEventListener("input", (e) => {
-  if (e.target.id === "memoInput") {
-    localStorage.setItem("memo", e.target.value);
-  }
-});
-
-window.addEventListener("load", () => {
-  if ("serviceWorker" in navigator) {
-    navigator.serviceWorker.register("./sw.js")
-      .then(() => console.log("SW登録成功"))
-      .catch(err => console.error("SW登録失敗", err));
-  }
-});
-

@@ -2,23 +2,31 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>SPAサンプル</title>
+  <title>Markdown記事サイト</title>
+
   <link rel="stylesheet" href="style.css">
   <link rel="manifest" href="manifest.json">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#000000">
+
+  <!-- Markdown -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+  <!-- FontAwesome（任意） -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
+
 <body>
 
   <nav>
-    <button class="theme-btn" onclick="toggleTheme()"><i class="fa-solid fa-moon"></i></button>
-    <button onclick="navigate('home')">ホーム</button>
-    <button onclick="navigate('about')">紹介</button>
+    <button onclick="navigate('home')">記事一覧</button>
+    <button onclick="navigate('create')">投稿</button>
+
+    <button class="theme-btn" onclick="toggleTheme()">
+      <i class="fa-solid fa-moon"></i>
+    </button>
   </nav>
 
-  <main id="app">
-    <!-- ここが入れ替わる -->
-  </main>
+  <main id="app"></main>
 
   <script src="script.js"></script>
 </body>

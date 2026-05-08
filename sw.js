@@ -1,4 +1,4 @@
-const CACHE_NAME = "spa-cache-v2";
+const CACHE_NAME = "markdown-blog-v1";
 
 const FILES_TO_CACHE = [
   "./site.html",
