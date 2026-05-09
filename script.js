@@ -26,7 +26,7 @@ async function renderHome() {
     <h1>記事一覧</h1>
 
     <div>
-      ${posts.map(p => `
+      ${posts.reverse().map(p => `
         <div class="card" onclick="openPost('${p.id}')">
           <h3>${p.title}</h3>
           <small>${new Date(p.date).toLocaleString()}</small>
@@ -55,7 +55,9 @@ function renderCreate() {
 
   document.getElementById("content").addEventListener("input", (e) => {
     document.getElementById("preview").innerHTML =
-      marked.parse(e.target.value);
+      DOMPurify.sanitize(
+        marked.parse(e.target.value)
+      );
   });
 }
 
@@ -70,7 +72,7 @@ async function savePost() {
   const content =
     document.getElementById("content").value;
 
-  await fetch(
+  const res = await fetch(
     "https://markdown-blog-api.inoli1227.workers.dev/",
     {
       method: "POST",
@@ -86,7 +88,12 @@ async function savePost() {
     }
   );
 
-  alert("投稿しました");
+  if (!res.ok) {
+    alert("投稿失敗");
+    return;
+  }
+
+  alert("投稿しました。反映まで少し待ってください");
 
   navigate("home");
 }
@@ -100,6 +107,10 @@ async function openPost(id) {
 
   const post =
     posts.find(p => p.id == id);
+  if (!post) {
+    app.innerHTML = "<h1>記事が見つかりません</h1>";
+    return;
+  }
 
   app.innerHTML = `
     <button onclick="navigate('home')">
