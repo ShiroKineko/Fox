@@ -55,7 +55,9 @@ function renderCreate() {
 
   document.getElementById("content").addEventListener("input", (e) => {
     document.getElementById("preview").innerHTML =
-      marked.parse(e.target.value);
+      DOMPurify.sanitize(
+        marked.parse(e.target.value)
+      );
   });
 }
 
@@ -86,7 +88,10 @@ async function savePost() {
     }
   );
 
-  alert("投稿しました");
+  if (!res.ok) {
+    alert("投稿失敗");
+    return;
+  }
 
   navigate("home");
 }
@@ -100,6 +105,10 @@ async function openPost(id) {
 
   const post =
     posts.find(p => p.id == id);
+  if (!post) {
+    app.innerHTML = "<h1>記事が見つかりません</h1>";
+    return;
+  }
 
   app.innerHTML = `
     <button onclick="navigate('home')">
