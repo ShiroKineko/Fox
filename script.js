@@ -88,6 +88,8 @@ async function savePost() {
     }
   );
 
+  console.log(data);
+
   if (!res.ok) {
     alert("投稿失敗");
     return;
