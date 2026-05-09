@@ -1,7 +1,8 @@
 const app = document.getElementById("app");
 
-function getPosts() {
-  return JSON.parse(localStorage.getItem("posts") || "[]");
+async function getPosts() {
+  const res = await fetch("./posts.json");
+  return await res.json();
 }
 
 function savePosts(posts) {
@@ -63,22 +64,32 @@ function renderCreate() {
 /* --------------------
    保存
 -------------------- */
-function savePost() {
-  const title = document.getElementById("title").value;
-  const content = document.getElementById("content").value;
+async function savePost() {
 
-  const posts = getPosts();
+  const title =
+    document.getElementById("title").value;
 
-  posts.push({
-    id: Date.now().toString(),
-    title,
-    content,
-    date: new Date().toISOString()
-  });
+  const content =
+    document.getElementById("content").value;
 
-  savePosts(posts);
+  await fetch(
+    "https://YOUR-WORKER.workers.dev",
+    {
+      method: "POST",
 
-  alert("投稿完了");
+      headers: {
+        "Content-Type": "application/json"
+      },
+
+      body: JSON.stringify({
+        title,
+        content
+      })
+    }
+  );
+
+  alert("投稿しました");
+
   navigate("home");
 }
 
@@ -113,3 +124,5 @@ window.addEventListener("load", () => {
 
   navigate("home");
 });
+
+marked.parse(post.content)
