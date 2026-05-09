@@ -110,7 +110,11 @@ async function openPost(id) {
     <h1>${post.title}</h1>
 
     <div>
-      ${marked.parse(post.content)}
+      ${
+        DOMPurify.sanitize(
+          marked.parse(post.content)
+        )
+      }
     </div>
   `;
 }
