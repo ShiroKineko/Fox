@@ -5,7 +5,6 @@ async function getPosts() {
   return await res.json();
 }
 
-
 /* --------------------
    画面ルーティング
 -------------------- */
