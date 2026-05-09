@@ -1,21 +1,8 @@
 const app = document.getElementById("app");
 
 async function getPosts() {
-  const res = await fetch(
-  "https://markdown-blog-api.inoli1227.workers.dev/",
-  {
-    method: "POST",
-
-    headers: {
-      "Content-Type": "application/json"
-    },
-
-    body: JSON.stringify({
-      title,
-      content
-    })
-  }
-);
+  const res = await fetch("./posts.json");
+  return await res.json();
 }
 
 /* --------------------
@@ -39,7 +26,7 @@ async function renderHome() {
     <h1>記事一覧</h1>
 
     <div>
-      ${posts.map(p => `
+      ${posts.reverse().map(p => `
         <div class="card" onclick="openPost('${p.id}')">
           <h3>${p.title}</h3>
           <small>${new Date(p.date).toLocaleString()}</small>
@@ -85,7 +72,7 @@ async function savePost() {
   const content =
     document.getElementById("content").value;
 
-  await fetch(
+  const res = await fetch(
     "https://markdown-blog-api.inoli1227.workers.dev/",
     {
       method: "POST",
@@ -105,6 +92,8 @@ async function savePost() {
     alert("投稿失敗");
     return;
   }
+
+  alert("投稿しました。反映まで少し待ってください");
 
   navigate("home");
 }
