@@ -73,7 +73,7 @@ async function savePost() {
     document.getElementById("content").value;
 
   await fetch(
-    "https://YOUR-WORKER.workers.dev",
+    "https://markdown-blog-api.inoli1227.workers.dev/",
     {
       method: "POST",
 
@@ -124,5 +124,3 @@ window.addEventListener("load", () => {
 
   navigate("home");
 });
-
-marked.parse(post.content)
