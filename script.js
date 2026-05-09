@@ -5,10 +5,6 @@ async function getPosts() {
   return await res.json();
 }
 
-function savePosts(posts) {
-  localStorage.setItem("posts", JSON.stringify(posts));
-}
-
 /* --------------------
    画面ルーティング
 -------------------- */
