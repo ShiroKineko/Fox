@@ -1,8 +1,21 @@
 const app = document.getElementById("app");
 
 async function getPosts() {
-  const res = await fetch("./posts.json");
-  return await res.json();
+  const res = await fetch(
+  "https://markdown-blog-api.inoli1227.workers.dev/",
+  {
+    method: "POST",
+
+    headers: {
+      "Content-Type": "application/json"
+    },
+
+    body: JSON.stringify({
+      title,
+      content
+    })
+  }
+);
 }
 
 /* --------------------
