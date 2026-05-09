@@ -22,11 +22,13 @@ function navigate(page) {
 /* --------------------
    記事一覧
 -------------------- */
-function renderHome() {
-  const posts = getPosts();
+async function renderHome() {
+
+  const posts = await getPosts();
 
   app.innerHTML = `
     <h1>記事一覧</h1>
+
     <div>
       ${posts.map(p => `
         <div class="card" onclick="openPost('${p.id}')">
@@ -96,13 +98,23 @@ async function savePost() {
 /* --------------------
    記事表示
 -------------------- */
-function openPost(id) {
-  const post = getPosts().find(p => p.id === id);
+async function openPost(id) {
+
+  const posts = await getPosts();
+
+  const post =
+    posts.find(p => p.id == id);
 
   app.innerHTML = `
-    <button onclick="navigate('home')">←戻る</button>
+    <button onclick="navigate('home')">
+      ←戻る
+    </button>
+
     <h1>${post.title}</h1>
-    <div>${marked.parse(post.content)}</div>
+
+    <div>
+      ${marked.parse(post.content)}
+    </div>
   `;
 }
 
